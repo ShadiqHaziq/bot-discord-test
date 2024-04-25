@@ -1,0 +1,96 @@
+import os
+import discord
+import random
+from discord.ext import commands
+from bot_logic import gen_pass
+
+# Bot description
+description = '''An example bot to showcase the discord.ext.commands extension module.
+There are a number of utility commands being showcased here.'''
+
+# Bot intents
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
+
+# Bot initialization
+bot = commands.Bot(command_prefix='/', description=description, intents=intents)
+
+
+# Event: Bot is ready
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    print('------')
+
+
+# Command: Add numbers
+@bot.command()
+async def add(ctx, left: int, right: int):
+    """Adds two numbers together."""
+    await ctx.send(left + right)
+
+
+# Command: Repeat message
+@bot.command()
+async def repeat(ctx, times: int, content='repeating...'):
+    """Repeats a message multiple times."""
+    for _ in range(times):
+        await ctx.send(content)
+
+
+# Command: Generate password
+@bot.command()
+async def pw(ctx):
+    await ctx.send(f'Generated password: {gen_pass(10)}')
+
+
+# Command: Coin flip
+@bot.command()
+async def coinflip(ctx):
+    result = random.choice(['Head', 'Tail'])
+    await ctx.send(f'It is {result}!')
+
+
+# Command: Roll dice
+@bot.command()
+async def dice(ctx):
+    result = random.randint(1, 6)
+    await ctx.send(f'It is {result}!')
+
+
+# Command: Write string to file
+@bot.command()
+async def tulis(ctx, *, my_string: str):
+    with open('kalimat.txt', 'w', encoding='utf-8') as file:
+        file.write(my_string)
+
+
+# Command: Append string to file
+@bot.command()
+async def tambahkan(ctx, *, my_string: str):
+    with open('kalimat.txt', 'a', encoding='utf-8') as file:
+        file.write('\n' + my_string)
+
+
+# Command: Read file
+@bot.command()
+async def baca(ctx):
+    with open('kalimat.txt', 'r', encoding='utf-8') as file:
+        content = file.read()
+    await ctx.send(content)
+
+
+# Command: Welcome message
+@bot.command()
+async def joined(ctx, member: discord.Member):
+    """Says when a member joined."""
+    await ctx.send(f'{member.name} joined {discord.utils.format_dt(member.joined_at)}')
+
+
+# Command: Send a meme
+@bot.command()
+async def gifsan(ctx):
+    with open(f'gif/sanportal.gif', 'rb') as file:
+        picture = discord.File(file)
+    await ctx.send(file=picture)
