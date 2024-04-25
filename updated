@@ -51,6 +51,12 @@ async def coinflip(ctx):
     result = random.choice(['Head', 'Tail'])
     await ctx.send(f'It is {result}!')
 
+ # Command: amongusflip
+@bot.command()
+async def amongusflip(ctx):
+    result = random.choice(['AMONGUS!', 'Gus?'])
+    await ctx.send(f'It is {result}!')
+
 
 # Command: Roll dice
 @bot.command()
